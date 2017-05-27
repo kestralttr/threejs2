@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>My second three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/three.js"></script>
+	</head>
+	<body>
+		<script>
+
+		let cP = {
+			x:0,y:0,z:0
+		}
+		let cO = {
+			x:0,y:0,z:14
+		}
+
+		let cameraOrientation = new THREE.Vector3(cO[0],cO[1],cO[2]);
+
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    let renderer = new THREE.WebGLRenderer();
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight
+    );
+    document.body.appendChild(renderer.domElement);
+
+    let geometry = new THREE.BoxGeometry(1,1,1);
+    let material = new THREE.MeshBasicMaterial({color:0x00ff00});
+    let cube1 = new THREE.Mesh(geometry,material);
+    scene.add(cube1);
+
+    geometry = new THREE.BoxGeometry(5,1,1);
+    material = new THREE.MeshBasicMaterial({color:0xf44256});
+    let cube2 = new THREE.Mesh(geometry,material);
+    cube2.position.y += 5;
+    scene.add(cube2);
+
+    geometry = new THREE.BoxGeometry(2,4,0.1);
+    material = new THREE.MeshBasicMaterial({color:0x00acbf});
+    let cube3 = new THREE.Mesh(geometry,material);
+    cube3.position.y -= 5;
+    scene.add(cube3);
+
+    camera.position.set(0,0,15);
+		camera.lookAt(cameraOrientation);
+
+    function decrementValue(val) {
+      return val - 0.1;
+    }
+
+    function incrementValue(val) {
+      return val + 0.1;
+    }
+
+    function render() {
+      requestAnimationFrame(render);
+
+      cube1.rotation.x += 0.02;
+      cube1.rotation.y += 0.01;
+      cube2.rotation.x += 0.01;
+      cube2.rotation.y += 0.02;
+      cube3.rotation.x += 0.01;
+      cube3.rotation.y += 0.01;
+
+			let direction;
+			let vector;
+			let theta;
+			let newX;
+			let newY;
+			let newZ;
+			let coordHold;
+
+			$(document).keydown(function(e) {
+				if(e.keyCode === 38) {
+					e.preventDefault()
+					// console.log("yo");
+					// vector = camera.getWorldDirection();
+					// theta = Math.atan2(vector.x,vector.z);
+					// console.log(theta);
+					// console.log("ehllo");
+
+					// newX = cO[0] + Math.abs(cP[0] - cO[0]);
+					// newY = cO[1] + Math.abs(cP[1] - cO[1]);
+					// newZ = cO[2] + Math.abs(cP[2] - cO[2]);
+					// cP[0] = cO[0];
+					// cP[1] = cO[1];
+					// cP[2] = cO[2];
+					// camera.position.set(cP[0],cP[1],cP[2]);
+					// cO[0] = newX;
+					// cO[1] = newY;
+					// cO[2] = newZ;
+					// cameraOrientation = new THREE.Vector3(cP[0],cP[1],cP[2]);
+					// camera.lookAt(cameraOrientation);
+
+					camera.position.set(0,0,15);
+
+					console.log(camera.position);
+					camera.updateProjectionMatrix()
+				}
+				if(e.keyCode === 40) {
+					e.preventDefault()
+					camera.position.z += 0.01;
+					camera.updateProjectionMatrix()
+				}
+				if(e.keyCode === 37) {
+					e.preventDefault()
+					// camera.lookAt(new THREE.Vector3(-2,0,0));
+					camera.rotation.y += 0.001;
+					camera.updateProjectionMatrix()
+				}
+				if(e.keyCode === 39) {
+					e.preventDefault()
+					camera.rotation.y -= 0.001;
+					camera.updateProjectionMatrix()
+				}
+			});
+      renderer.render(scene,camera);
+    }
+    render();
+
+		</script>
+	</body>
+</html>
